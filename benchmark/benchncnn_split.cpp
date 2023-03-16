@@ -15,7 +15,9 @@
 #include <float.h>
 #include <stdio.h>
 #include <string.h>
-#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include<iostream>
 
 #ifdef _WIN32
 #include <algorithm>
@@ -129,6 +131,7 @@ void benchmark(const char* comment, const ncnn::Mat& _in, const ncnn::Option& op
         ncnn::Extractor ex = net.create_extractor();
         ex.input(input_names[0], in);
         ex.extract(output_names[0], out);
+        // delete& ex;
     }
 
     double time_min = DBL_MAX;
@@ -166,6 +169,7 @@ int main(int argc, char** argv)
     int powersave = 2;
     int gpu_device = -1;
     int cooling_down = 1;
+    char* model_name = "vgg16";
 
     if (argc >= 2)
     {
@@ -186,6 +190,9 @@ int main(int argc, char** argv)
     if (argc >= 6)
     {
         cooling_down = atoi(argv[5]);
+    }
+    if (argc >= 7) {
+        model_name = argv[6];
     }
 
 #ifdef __EMSCRIPTEN__
@@ -209,7 +216,6 @@ int main(int argc, char** argv)
         g_warmup_loop_count = 10;
 
         g_vkdev = ncnn::get_gpu_device(gpu_device);
-        std::cout << "g_vkdev=" << g_vkdev << std::endl;
 
         g_blob_vkallocator = new ncnn::VkBlobAllocator(g_vkdev);
         g_staging_vkallocator = new ncnn::VkStagingAllocator(g_vkdev);
@@ -251,80 +257,84 @@ int main(int argc, char** argv)
     fprintf(stderr, "gpu_device = %d\n", gpu_device);
     fprintf(stderr, "cooling_down = %d\n", (int)g_enable_cooling_down);
 
+    std::unordered_map<std::string, std::vector<int>> um;
+    um["squeezenet"] = { 227,227,3 };
+
+    um["squeezenet_int8"] = { 227, 227, 3 };
+
+    um["mobilenet"] = { 224, 224, 3 };
+
+    um["mobilenet_int8"] = { 224, 224, 3 };
+
+    um["mobilenet_v2"] = { 224, 224, 3 };
+
+    // um["mobilenet_v2_int8"]={224, 224, 3};
+
+    um["mobilenet_v3"] = { 224, 224, 3 };
+
+    um["shufflenet"] = { 224, 224, 3 };
+
+    um["shufflenet_v2"] = { 224, 224, 3 };
+
+    um["mnasnet"] = { 224, 224, 3 };
+
+    um["proxylessnasnet"] = { 224, 224, 3 };
+
+    // um["efficientnet_b0"] = { 224, 224, 3 };
+
+    um["efficientnetv2_b0"] = { 224, 224, 3 };
+
+    um["regnety_400m"] = { 224, 224, 3 };
+
+    um["blazeface"] = { 128, 128, 3 };
+
+    um["googlenet"] = { 224, 224, 3 };
+
+    um["googlenet_int8"] = { 224, 224, 3 };
+
+    um["resnet18"] = { 224, 224, 3 };
+
+    um["resnet18_int8"] = { 224, 224, 3 };
+
+    um["alexnet"] = { 227, 227, 3 };
+
+    um["vgg16"] = { 224, 224, 3 };
+
+    um["vgg16_int8"] = { 224, 224, 3 };
+
+    um["resnet50"] = { 224, 224, 3 };
+
+    um["resnet50_int8"] = { 224, 224, 3 };
+
+    um["squeezenet_ssd"] = { 300, 300, 3 };
+
+    um["squeezenet_ssd_int8"] = { 300, 300, 3 };
+
+    um["mobilenet_ssd"] = { 300, 300, 3 };
+
+    um["mobilenet_ssd_int8"] = { 300, 300, 3 };
+
+    um["mobilenet_yolo"] = { 416, 416, 3 };
+
+    um["mobilenetv2_yolov3"] = { 352, 352, 3 };
+
+    um["yolov4-tiny"] = { 416, 416, 3 };
+
+    um["nanodet_m"] = { 320, 320, 3 };
+
+    um["yolo-fastest-1.1"] = { 320, 320, 3 };
+
+    um["yolo-fastestv2"] = { 352, 352, 3 };
+
+    um["vision_transformer"] = { 384, 384, 3 };
+
+    um["FastestDet"] = { 352, 352, 3 };
+
     // run
-    benchmark("resnet50_trans", ncnn::Mat(227, 227, 3), opt);
+    std::vector<int> params = um[model_name];
+    fprintf(stderr, "size = {%d, %d, %d}\n", params[0], params[1], params[2]);
+    benchmark(model_name, ncnn::Mat(params[0], params[1], params[2]), opt);
 
-    benchmark("squeezenet", ncnn::Mat(227, 227, 3), opt);
-
-    benchmark("squeezenet_int8", ncnn::Mat(227, 227, 3), opt);
-
-    benchmark("mobilenet", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("mobilenet_int8", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("mobilenet_v2", ncnn::Mat(224, 224, 3), opt);
-
-    // benchmark("mobilenet_v2_int8", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("mobilenet_v3", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("shufflenet", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("shufflenet_v2", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("mnasnet", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("proxylessnasnet", ncnn::Mat(224, 224, 3), opt);
-
-    // benchmark("efficientnet_b0", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("efficientnetv2_b0", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("regnety_400m", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("blazeface", ncnn::Mat(128, 128, 3), opt);
-
-    benchmark("googlenet", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("googlenet_int8", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("resnet18", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("resnet18_int8", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("alexnet", ncnn::Mat(227, 227, 3), opt);
-
-    benchmark("vgg16", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("vgg16_int8", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("resnet50", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("resnet50_int8", ncnn::Mat(224, 224, 3), opt);
-
-    benchmark("squeezenet_ssd", ncnn::Mat(300, 300, 3), opt);
-
-    benchmark("squeezenet_ssd_int8", ncnn::Mat(300, 300, 3), opt);
-
-    benchmark("mobilenet_ssd", ncnn::Mat(300, 300, 3), opt);
-
-    benchmark("mobilenet_ssd_int8", ncnn::Mat(300, 300, 3), opt);
-
-    benchmark("mobilenet_yolo", ncnn::Mat(416, 416, 3), opt);
-
-    benchmark("mobilenetv2_yolov3", ncnn::Mat(352, 352, 3), opt);
-
-    benchmark("yolov4-tiny", ncnn::Mat(416, 416, 3), opt);
-
-    benchmark("nanodet_m", ncnn::Mat(320, 320, 3), opt);
-
-    benchmark("yolo-fastest-1.1", ncnn::Mat(320, 320, 3), opt);
-
-    benchmark("yolo-fastestv2", ncnn::Mat(352, 352, 3), opt);
-
-    benchmark("vision_transformer", ncnn::Mat(384, 384, 3), opt);
-
-    benchmark("FastestDet", ncnn::Mat(352, 352, 3), opt);
 #if NCNN_VULKAN
     delete g_blob_vkallocator;
     delete g_staging_vkallocator;

@@ -97,6 +97,7 @@ void benchmark(const char* comment, const ncnn::Mat& _in, const ncnn::Option& op
     char parampath[256];
     sprintf(parampath, MODEL_DIR "%s.param", comment);
     net.load_param(parampath);
+    net.
 
     DataReaderFromEmpty dr;
     net.load_model(dr);
@@ -252,8 +253,6 @@ int main(int argc, char** argv)
     fprintf(stderr, "cooling_down = %d\n", (int)g_enable_cooling_down);
 
     // run
-    benchmark("resnet50_trans", ncnn::Mat(227, 227, 3), opt);
-
     benchmark("squeezenet", ncnn::Mat(227, 227, 3), opt);
 
     benchmark("squeezenet_int8", ncnn::Mat(227, 227, 3), opt);
