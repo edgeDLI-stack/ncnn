@@ -1,5 +1,8 @@
 ![NCNN](https://raw.githubusercontent.com/Tencent/ncnn/master/images/256-ncnn.png)
 
+# quick start
+- [onnx roadmap](https://github.com/edgeDLI-stack/ncnn/tree/master/docs/practice/onnx_plan.md)
+
 # ncnn
 
 [![License][badge-license]](LICENSE.txt)
@@ -284,17 +287,17 @@ ncnn 目前已在腾讯多款应用中使用，如：QQ，Qzone，微信，天�
 
 |            | Windows | Linux | Android | macOS | iOS |
 | ---------- | ------- | ----- | ------- | ----- | --- |
-| intel-cpu  | ✔️      | ✔️    | ❔      | ✔️    | /   |
-| intel-gpu  | ✔️      | ✔️    | ❔      | ❔    | /   |
-| amd-cpu    | ✔️      | ✔️    | ❔      | ✔️    | /   |
-| amd-gpu    | ✔️      | ✔️    | ❔      | ❔    | /   |
-| nvidia-gpu | ✔️      | ✔️    | ❔      | ❔    | /   |
-| qcom-cpu   | ❔      | ✔️    | ✅      | /     | /   |
-| qcom-gpu   | ❔      | ✔️    | ✔️      | /     | /   |
-| arm-cpu    | ❔      | ❔    | ✅      | /     | /   |
-| arm-gpu    | ❔      | ❔    | ✔️      | /     | /   |
-| apple-cpu  | /       | /     | /       | ✔️    | ✅  |
-| apple-gpu  | /       | /     | /       | ✔️    | ✔️  |
+| intel-cpu  | ✔️       | ✔️     | ❔       | ✔️     | /   |
+| intel-gpu  | ✔️       | ✔️     | ❔       | ❔     | /   |
+| amd-cpu    | ✔️       | ✔️     | ❔       | ✔️     | /   |
+| amd-gpu    | ✔️       | ✔️     | ❔       | ❔     | /   |
+| nvidia-gpu | ✔️       | ✔️     | ❔       | ❔     | /   |
+| qcom-cpu   | ❔       | ✔️     | ✅       | /     | /   |
+| qcom-gpu   | ❔       | ✔️     | ✔️       | /     | /   |
+| arm-cpu    | ❔       | ❔     | ✅       | /     | /   |
+| arm-gpu    | ❔       | ❔     | ✔️       | /     | /   |
+| apple-cpu  | /       | /     | /       | ✔️     | ✅   |
+| apple-gpu  | /       | /     | /       | ✔️     | ✔️   |
 
 ---
 
